@@ -21,6 +21,6 @@ public class RandomStringPublisher {
     public void publish() {
         int id = counter++;
         CustomMessage message = new CustomMessage(id, "Message #" + id);
-        template.convertAndSend(EXCHANGE_NAME, BINDING_KEY, message);
+        template.convertAndSend(EXCHANGE_NAME, BINDING_KEY1, message);
     }
 }

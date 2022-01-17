@@ -15,14 +15,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class CustomRabbitConfig {
-    public static final String QUEUE_NAME2 = "str-len";
     public static final String EXCHANGE_NAME = "str-exchange";
-    public static final String BINDING_KEY = "str-key";
-
-    @Bean
-    public Queue queue() {
-        return new Queue(QUEUE_NAME2);
-    }
+    public static final String QUEUE_NAME1 = "str-len";
+    public static final String BINDING_KEY1 = "str-key";
+    public static final String QUEUE_NAME2 = "str-uppercase";
+    public static final String BINDING_KEY2 = "str-uppercase-key";
 
     @Bean
     public DirectExchange directExchange() {
@@ -30,10 +27,27 @@ public class CustomRabbitConfig {
     }
 
     @Bean
-    public Binding binding() {
-        return BindingBuilder.bind(queue())
+    public Queue queue1() {
+        return new Queue(QUEUE_NAME1);
+    }
+
+    @Bean
+    public Binding binding1() {
+        return BindingBuilder.bind(queue1())
                 .to(directExchange())
-                .with(BINDING_KEY);
+                .with(BINDING_KEY1);
+    }
+
+    @Bean
+    public Queue queue2() {
+        return new Queue(QUEUE_NAME2);
+    }
+
+    @Bean
+    public Binding binding2() {
+        return BindingBuilder.bind(queue2())
+                .to(directExchange())
+                .with(BINDING_KEY2);
     }
 
     @Bean
@@ -48,6 +62,7 @@ public class CustomRabbitConfig {
         container.setConnectionFactory(connectionFactory);
         container.setMessageConverter(messageConverter());
         container.setPrefetchCount(1);
+        container.setConcurrentConsumers(5);
         return container;
     }
 }
